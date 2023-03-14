@@ -1,9 +1,10 @@
-#import pandas as pd
+import pandas as pd
 import csv
 import xmltodict
 import xml
 import os 
 from pprint import pprint
+from itertools import chain
 #from IPython.display import display
 
 # Create list of element names in directory
@@ -18,7 +19,6 @@ for root, dirs, files in os.walk(directory):
 print(len(elems))
 
 #Function to flatten nested dictionary
-
 def flatten(current, key, result):
     if isinstance(current, dict):
         for k in current:
@@ -44,39 +44,23 @@ for file in elems:
             print("Failed to parse file {} with error: {}".format(file, str(exc)))
 
     dict_list.append(doc)
+    # comment when done
+    #break
 
 print("Num files:",len(dict_list))
 
 
-# # Iterate through xml files and parse them into dictionaries
+# Finding list of unique keys 
+uniqueKeyList = list(set(chain.from_iterable(value.keys() for value in dict_list)))
 
-# for f in elems:
-#     with open(f, encoding='utf8') as fd:
-#         doc = xmltodict.parse(fd.read())
+# Printing the list
+#print(uniqueKeyList)
 
-#     dict_list.append(doc)
+# Creating dataframe from list of dict
+df = pd.DataFrame(dict_list, 
+                   columns=uniqueKeyList)
 
-# print(len(dict_list))
+#print(df)
 
-
-
-
-
-
-
-# result = flatten(doc, '', {})
-
-# pprint(result)
-
-
-
-# path_to_cvs = os.path.expanduser('~/Downloads/Form_990_Series_(e-file)_XML_2020/trying_first.csv')
-# with open(path_to_cvs,'w', newline='') as f:
-#     w = csv.DictWriter(f, result.keys())
-#     w.writeheader()
-#     w.writerow(result)
-
-
-# df = pd.read_csv(path_to_cvs)
-# display(df)
-
+# Exporting into csv file
+df.to_csv('first_folder.csv', encoding='utf-8', index=False)
