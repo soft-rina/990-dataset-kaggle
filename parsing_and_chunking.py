@@ -5,7 +5,7 @@ import xml
 import os 
 from pprint import pprint
 from itertools import chain, islice
-#from IPython.display import display
+
 
 # Batching function
 def batched(l, n):
@@ -30,7 +30,6 @@ def flatten(current, key, result):
 def chunking_csv(l):
     for i, batch in enumerate(batched(l, 5000)):
         process_chunk(batch, '{}_chunk.csv'.format(i))
-        #print(len(batch))
         
 
 def process_chunk(batch, dst):
