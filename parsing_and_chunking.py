@@ -1,10 +1,8 @@
 import pandas as pd
-import csv
 import xmltodict
 import xml
 import os 
-from pprint import pprint
-from itertools import chain, islice
+from itertools import chain
 
 
 # Batching function
@@ -58,12 +56,11 @@ def process_chunk(batch, dst):
 # Create list of element names in directory
 #directory = os.path.expanduser('~/Downloads/Form_990_Series_(e-file)_XML_2020/')
 directory = os.path.expanduser('~/Downloads/Form_990_Series_(e-file)_XML_2020/download990xml_2020_1')
-elems = []
+paths = []
 for root, dirs, files in os.walk(directory):
     for filename in files:
             if filename.endswith('.xml'):
-                elems.append(os.path.join(root, filename))
+                paths.append(os.path.join(root, filename))
 
-print(len(elems))
 
-chunking_csv(elems)
+chunking_csv(paths)
